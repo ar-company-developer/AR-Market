@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AR Market</title>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+:root{--bg-color:#FDFDFD;--text-main:#1D1D21;--text-secondary:#97979B;--accent-purple:#ad28dc;--card-gray-bg:#F3F3F7;--danger-color:#ff3b30;--success-color:#34c759;--modal-overlay:rgba(0,0,0,0.4)}body.dark-mode{--bg-color:#121212;--text-main:#FFFFFF;--text-secondary:#8E8E93;--card-gray-bg:#1C1C1E;--modal-overlay:rgba(0,0,0,0.7)}body{font-family:'Roboto',sans-serif;background-color:var(--bg-color);margin:0;padding:0;color:var(--text-main);-webkit-font-smoothing:antialiased}.header{display:flex;justify-content:space-between;align-items:center;padding:20px 25px;background:var(--bg-color);position:sticky;top:0;z-index:100}.header h1{font-size:20px;font-weight:800;margin:0}.header-actions{display:flex;gap:15px}.circle-btn{width:40px;height:40px;border-radius:50%;background:var(--card-gray-bg);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-main)}.controls{padding:0 25px 20px;display:grid;grid-template-columns:1fr 1fr;gap:12px}.btn-main{background:var(--accent-purple);color:white;border:none;padding:12px;border-radius:12px;font-weight:600;font-size:14px;cursor:pointer}.btn-secondary{background:var(--card-gray-bg);color:var(--text-main);border:none;padding:12px;border-radius:12px;font-weight:600;font-size:14px;cursor:pointer}.product-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:15px;padding:0 25px 40px}.product-card{background:var(--card-gray-bg);border-radius:20px;overflow:hidden;display:flex;flex-direction:column;transition:transform 0.1s}.product-image{width:100%;aspect-ratio:1/1;display:flex;align-items:center;justify-content:center;padding:10px;box-sizing:border-box}.product-image img{max-width:100%;max-height:100%; border-radius: 20px;object-fit:contain}.product-name{background:var(--bg-color);padding:10px 15px 2px;font-weight:700;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.product-price{background:var(--bg-color);padding:0 15px 12px;font-weight:800;color:var(--text-main)}.product-price.available{color:var(--success-color)}.product-price.own-listing{color:var(--accent-purple)}.buy-button{width:100%;padding:10px;border:none;background:var(--text-main);color:var(--bg-color);font-weight:700;cursor:pointer}.buy-button:disabled{background:#ccc;cursor:not-allowed}.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:var(--modal-overlay);display:none;align-items:flex-end;z-index:1000;backdrop-filter:blur(4px)}.modal-content{background:var(--bg-color);width:100%;border-radius:24px 24px 0 0;padding:25px;box-sizing:border-box;max-height:90vh;overflow-y:auto;animation:slideUp 0.3s ease-out}@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}.modal-header{font-size:20px;font-weight:800;margin-bottom:20px;text-align:center}.modal-info-row{display:flex;justify-content:space-between;margin-bottom:10px;font-size:15px}.modal-info-row span{color:var(--text-secondary)}.modal-info-row strong{color:var(--text-main)}input[type="number"]{width:100%;padding:12px;border-radius:10px;border:1px solid var(--card-gray-bg);background:var(--card-gray-bg);color:var(--text-main);font-size:16px;margin-top:10px}.order-item,.my-listing-card,.transaction-item{background:var(--card-gray-bg);border-radius:15px;padding:15px;margin-bottom:10px}.my-listing-card{display:flex;align-items:center;gap:15px}.my-listing-image img{width:50px;height:50px;border-radius:8px;object-fit:cover}.delete-button{background:var(--danger-color);color:white;border:none;padding:8px 12px;border-radius:8px;font-size:12px}.telegram-chat-button{width:100%;background:#0088cc;color:white;border:none;padding:12px;border-radius:12px;margin-top:10px}#loadingMessage{text-align:center;padding:50px;color:var(--text-secondary)}
+
+    </style>
+</head>
+<body>
+    <div class="header">
+        <button class="circle-btn" onclick="window.location.href='setting.html'">
+        <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <path d="M16 7C16 9.20914 14.2091 11 12 11C9.79086 11 8 9.20914 8 7C8 4.79086 9.79086 3 12 3C14.2091 3 16 4.79086 16 7Z" stroke="var(--text-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> <path d="M12 14C8.13401 14 5 17.134 5 21H19C19 17.134 15.866 14 12 14Z" stroke="var(--text-main)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path> </g></svg>
+        </button>
+        <h1>AR Market</h1>
+        <div class="header-actions">
+            <button id="myChatsButton" class="circle-btn" onclick="window.location.href='chats.html'">
+                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g clip-path="url(#clip0_15_90)"> <rect width="24" height="24" fill="var(--card-gray-bg)"></rect> <path d="M20 12C20 16.4183 16.4183 20 12 20C10.5937 20 9.27223 19.6372 8.12398 19C7.53267 18.6719 4.48731 20.4615 3.99998 20C3.44096 19.4706 5.4583 16.6708 5.07024 16C4.38956 14.8233 3.99999 13.4571 3.99999 12C3.99999 7.58172 7.58171 4 12 4C16.4183 4 20 7.58172 20 12Z" stroke="var(--text-main)" stroke-linejoin="round"></path> </g> <defs> <clipPath id="clip0_15_90"> <rect width="24" height="24" fill="white"></rect> </clipPath> </defs> </g></svg>
+            </button>
+        </div>
+    </div>
+    <div class="controls">
+        <button class="btn-main" onclick="window.location.href='selling.html'"data-i18n="sell">Продати</button>
+        <button class="btn-secondary" onclick="openMySalesModal()" data-i18n="my_sells">Мої продажі</button>
+    </div>
+    <div id="loadingMessage"data-i18n="loading">Завантаження товарів...</div>
+    <div class="product-grid" id="productGrid">
+        </div>
+    <div id="buyModalOverlay" class="modal-overlay" onclick="closeBuyModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header" data-i18n="abc">Купівля товару</div>
+            <div style="text-align: center; margin-bottom: 20px;">
+                <img id="modalProductImage" src="" style="max-width: 150px; border-radius: 15px;">
+            </div>
+            <div class="modal-info-row"><span data-i18n="sell_name_label">Назва:</span><strong id="modalProductName"></strong></div>
+            <div class="modal-info-row"><span data-i18n="sell_price_label" >Ціна:</span><strong id="modalProductPrice"></strong></div>
+            <div class="modal-info-row"><span data-i18n="seller">Продавець:</span><strong id="modalSellerName"></strong></div>
+            <div class="modal-info-row"><span data-i18n="cards">Картка:</span><strong id="modalSellerCardNumber"></strong></div>
+            <div id="modalProductDescription" style="font-size: 13px; color: var(--text-secondary); margin: 10px 0;"></div>
+            <div style="margin-top: 15px;">
+                <label style="font-size: 14px; font-weight: 600;">Quantity: <small id="modalMaxQuantity"></small></label>
+                <input type="number" id="modalQuantity" value="1" min="1">
+            </div>
+            <button id="confirmBuyButton" class="btn-main" style="width: 100%; margin-top: 20px; padding: 16px;" data-i18n="market_buy">Підтвердити покупку</button>
+            <button class="btn-secondary" style="width: 100%; margin-top: 10px;" onclick="closeBuyModal()"data-i18n="cancel">Скасувати</button>
+        </div>
+    </div>
+    <div id="mySalesModalOverlay" class="modal-overlay" onclick="closeMySalesModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">Мої Продажі</div>
+            <h3 style="font-size: 16px;">Нові замовлення</h3>
+            <div id="myOrdersList"></div>
+            <h3 style="font-size: 16px; margin-top: 25px;">Активні оголошення</h3>
+            <div id="mySalesList"></div>
+            <h3 style="font-size: 16px; margin-top: 25px;">Історія продажів</h3>
+            <div id="myTransactionsList"></div>
+            <button class="btn-main" style="width: 100%; margin-top: 20px;" onclick="closeMySalesModal()">Закрити</button>
+        </div>
+    </div>
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import { getDatabase, ref, onValue, get, remove, push, update } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-database.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+    const firebaseConfig = {
+      apiKey: "AIzaSyCxfUZl7STcdC53SSogfbVc-4dIijVEbLg",
+      authDomain: "ar-bank-dbfd9.firebaseapp.com",
+      databaseURL: "https://ar-bank-dbfd9-default-rtdb.europe-west1.firebasedatabase.app",
+      projectId: "ar-bank-dbfd9",
+    };
+    const app = initializeApp(firebaseConfig);
+    const database = getDatabase(app); 
+    const auth = getAuth(app); 
+    const productGrid = document.getElementById('productGrid');
+    const loadingMessage = document.getElementById('loadingMessage');
+    const myChatsButton = document.getElementById('myChatsButton'); 
+    const modalOverlay = document.getElementById('buyModalOverlay');
+    const modalImage = document.getElementById('modalProductImage');
+    const modalProductName = document.getElementById('modalProductName');
+    const modalProductPrice = document.getElementById('modalProductPrice');
+    const modalSellerName = document.getElementById('modalSellerName');
+    const modalSellerCardNumber = document.getElementById('modalSellerCardNumber');
+    const modalQuantityInput = document.getElementById('modalQuantity');
+    const modalMaxQuantity = document.getElementById('modalMaxQuantity');
+    const confirmBuyButton = document.getElementById('confirmBuyButton');
+    const mySalesModalOverlay = document.getElementById('mySalesModalOverlay');
+    const myOrdersList = document.getElementById('myOrdersList'); 
+    const mySalesList = document.getElementById('mySalesList'); 
+    const myTransactionsList = document.getElementById('myTransactionsList');
+    let currentUID = null; 
+    let currentUsername = null; 
+    const IMAGE_BASE_PATH = ''; 
+    let selectedListingData = null; 
+    function formatPrice(price) {
+        const num = Number(price);
+        if (num % 1 === 0) {
+            return num.toFixed(0); 
+        }
+        return num.toFixed(2);
+    }
+    async function fetchSellerUsername(sellerUID) {
+        try {
+            const userRef = ref(database, `user/${sellerUID}/username`);
+            const snapshot = await get(userRef);
+            return snapshot.exists() ? snapshot.val() : 'Невідомий продавець';
+        } catch (error) {
+            console.error("Помилка при отриманні імені продавця:", error);
+            return 'Помилка завантаження імені';
+        }
+    }
+    async function fetchCurrentUsername(uid) {
+        try {
+            const userRef = ref(database, `user/${uid}/username`);
+            const snapshot = await get(userRef);
+            return snapshot.exists() ? snapshot.val() : 'Анонім';
+        } catch (error) {
+            console.error("Помилка при отриманні імені поточного користувача:", error);
+            return 'Анонім';
+        }
+    }
+    async function getCardNumberByUID(uid) {
+        try {
+            const cardRef = ref(database, `user/${uid}/card/number`);
+            const snapshot = await get(cardRef);
+            return snapshot.exists() ? (snapshot.val() || "").replace(/\s/g, '') : "Номер картки не знайдено";
+        } catch (error) {
+            console.error("Помилка при отриманні номера картки:", error);
+            return "ERROR_FETCH";
+        }
+    }
+    function getChatKey(uid1, uid2) {
+        return uid1 < uid2 ? `${uid1}_${uid2}` : `${uid2}_${uid1}`;
+    }
+    window.closeBuyModal = function() {
+        modalOverlay.style.display = 'none';
+        modalSellerName.textContent = 'Завантаження...'; 
+        modalSellerCardNumber.textContent = 'Завантаження...';
+        modalQuantityInput.value = '1'; 
+    }
+    function openBuyModal(listing) {
+        if (!currentUID) {
+            alert("Будь ласка, авторизуйтеся, щоб здійснити покупку.");
+            return;
+        }
+        selectedListingData = listing;
+        const price = Number(listing.price || listing.sum || 0);
+        const maxQty = Number(listing.quantity || 0);
+        if (maxQty <= 0 || listing.sellerUID === currentUID) {
+             alert(listing.sellerUID === currentUID ? "Ви не можете купити власний товар." : "Цей товар зараз недоступний для купівлі.");
+             return;
+        }
+        const displayPrice = price > 0 ? `${formatPrice(price)}€` : 'Ціна відсутня';
+        modalImage.src = listing.image ? `${IMAGE_BASE_PATH}${listing.image}` : 'placeholder.png';
+        modalProductName.textContent = listing.name || 'Невідомий товар';
+        modalProductPrice.textContent = displayPrice; 
+        modalMaxQuantity.textContent = `Max: ${maxQty}`;
+        modalQuantityInput.max = maxQty;
+        modalQuantityInput.value = 1;
+        modalQuantityInput.oninput = function() {
+            let value = parseInt(this.value);
+            if (isNaN(value) || value < 0) {
+
+            } else if (value > maxQty) {
+                this.value = maxQty;
+            }
+        };
+        modalSellerName.textContent = 'Завантаження...';
+        modalSellerCardNumber.textContent = 'Завантаження...';
+        fetchSellerUsername(listing.sellerUID).then(username => {
+            modalSellerName.textContent = username;
+        });
+        getCardNumberByUID(listing.sellerUID).then(cardNumber => {
+            const formattedCard = (cardNumber || '').match(/.{1,4}/g)?.join(' ') || 'Номер відсутній';
+            modalSellerCardNumber.textContent = formattedCard;
+        });
+        const descriptionElement = document.getElementById('modalProductDescription');
+    if (listing.description && listing.description.trim() !== '') {
+        descriptionElement.textContent = listing.description;
+        descriptionElement.parentElement.style.display = 'block';
+    } else {
+        descriptionElement.textContent = 'Опис відсутній';
+    }
+        modalOverlay.style.display = 'flex';
+    }
+    async function handleConfirmBuy() {
+        const quantity = parseInt(modalQuantityInput.value);
+        const maxQty = Number(selectedListingData.quantity || 0);
+        const listingId = selectedListingData.id;
+        const sellerUID = selectedListingData.sellerUID;
+        if (isNaN(quantity) || quantity < 1 || quantity > maxQty || maxQty <= 0) {
+            alert(`Неможливо здійснити покупку`);
+            return;
+        }
+        const chatKey = getChatKey(currentUID, sellerUID);
+        const transactionData = {
+            listingId: listingId,
+            sellerUID: sellerUID,
+            buyerUID: currentUID,
+            buyerUsername: currentUsername || 'Анонім',
+            productName: selectedListingData.name,
+            quantity: quantity,
+            pricePerUnit: Number(selectedListingData.price || selectedListingData.sum || 0),
+            timestamp: Date.now(),
+            paymentStatus: 'awaiting_delivery', 
+            chatKey: chatKey 
+        };
+        try {
+            const transactionsRef = ref(database, 'market/transactions');
+            await push(transactionsRef, transactionData);
+            const newQuantity = maxQty - quantity;
+            const listingRef = ref(database, `market/selling/${listingId}`);
+            await update(listingRef, {
+                quantity: newQuantity,
+            });
+            const chatRef = ref(database, `market/chats/${chatKey}`);
+            await push(chatRef, {
+                senderUID: 'SYSTEM',
+                senderName: 'Система',
+                text: ` Транзакція ініційована! Товар: "${selectedListingData.name}". Кількість: ${quantity} шт.`,
+                timestamp: Date.now()
+            });
+            alert(`Покупка товару "${selectedListingData.name}" ініційована!`);
+            closeBuyModal();
+            window.location.href = 'chats.html'; 
+        } catch (error) {
+            console.error("Помилка під час ініціації транзакції:", error);
+            alert("Помилка: Не вдалося ініціювати покупку та чат. Спробуйте пізніше.");
+        }
+    }
+    window.openMySalesModal = function() {
+        if (!currentUID) {
+            alert("Будь ласка, авторизуйтеся, щоб переглянути свої оголошення.");
+            return;
+        }
+        mySalesModalOverlay.style.display = 'flex';
+        
+        loadNewOrders(); 
+        loadMyListings(); 
+        loadMyTransactions(); 
+    }
+    window.closeMySalesModal = function() {
+        mySalesModalOverlay.style.display = 'none';
+    }
+    async function createNewOrderCard(transaction) {
+        const card = document.createElement('div');
+        card.className = 'order-item';
+        
+        const buyerInfo = `Покупець: <strong>${transaction.buyerUsername || 'Анонім'}</strong>`;
+        card.innerHTML = `
+            <div class="order-product-name">
+                ${transaction.productName || 'Невідомий товар'} (${transaction.quantity} шт.)
+            </div>
+            <div class="order-info">${buyerInfo}</div>
+            `;
+        return card;
+    }
+    function loadNewOrders() {
+        if (!currentUID) return;
+        myOrdersList.innerHTML = '<p style="text-align: center; color: var(--secondary-text-color);">Завантаження нових замовлень...</p>';
+        const transactionsRef = ref(database, 'market/transactions'); 
+        onValue(transactionsRef, async (snapshot) => {
+            const transactions = snapshot.val();
+            myOrdersList.innerHTML = ''; 
+           let ordersFound = 0;
+            const ordersFragment = document.createDocumentFragment();
+            if (transactions) {
+                const sortedTransactions = Object.values(transactions)
+                    .filter(t => t.sellerUID === currentUID && t.paymentStatus !== 'confirmed') 
+                    .sort((a, b) => b.timestamp - a.timestamp); 
+                const orderCardPromises = sortedTransactions.map(transaction => createNewOrderCard(transaction));
+                const orderCards = await Promise.all(orderCardPromises);
+                orderCards.forEach(card => {
+                    ordersFragment.appendChild(card);
+                    ordersFound++;
+                });
+            }
+            if (ordersFound === 0) {
+                 myOrdersList.innerHTML = '<p style="text-align: center; color: var(--secondary-text-color);">Немає нових замовлень.</p>';
+            } else {
+                myOrdersList.appendChild(ordersFragment);
+                const chatRedirectButton = document.createElement('button');
+                chatRedirectButton.className = 'telegram-chat-button';
+                chatRedirectButton.textContent = 'Chats';
+                chatRedirectButton.onclick = () => window.location.href='chats.html';
+                myOrdersList.appendChild(chatRedirectButton);
+            }
+        }, (error) => {
+            console.error("Помилка завантаження нових замовлень:", error);
+            myOrdersList.innerHTML = '<p style="text-align: center; color: var(--danger-color);">❌ Помилка завантаження замовлень.</p>';
+        });
+    }
+    function createMyListingCard(listing) {
+        const price = Number(listing.price || 0); 
+        const displayPrice = price > 0 ? `${formatPrice(price)}€` : 'Ціна відсутня';
+        const quantity = Number(listing.quantity || 0);
+        const displayQuantity = quantity > 0 ? quantity : 'Відсутня';
+        const card = document.createElement('div');
+        card.className = 'my-listing-card';
+        const imageSrc = listing.image ? `${IMAGE_BASE_PATH}${listing.image}` : 'placeholder.png'; 
+        card.innerHTML = `
+            <div class="my-listing-image">
+                <img src="${imageSrc}" alt="${listing.name}">
+            </div>
+            <div class="my-listing-details">
+                <div class="my-listing-name">${listing.name || 'Невідомий товар'}</div>
+                <div class="my-listing-info">
+                    <span>${displayPrice}</span>
+                    <span>Кількість: ${displayQuantity}</span>
+                </div>
+            </div>
+            <button class="delete-button" data-listing-id="${listing.id}">Видалити</button>
+        `;
+        card.querySelector('.delete-button').addEventListener('click', (e) => {
+            const listingId = e.target.getAttribute('data-listing-id');
+            handleDeleteListing(listingId, listing.name);
+        });
+        return card;
+    }
+    function handleDeleteListing(listingId, listingName) {
+        if (confirm(`Ви впевнені, що хочете видалити оголошення "${listingName}"?`)) {
+            const listingRef = ref(database, `market/selling/${listingId}`);
+            remove(listingRef)
+                .then(() => {
+                    console.log(` Оголошення ${listingName} успішно видалено.`);
+                })
+                .catch((error) => {
+                    console.error("Помилка видалення оголошення:", error);
+                    alert("Помилка при видаленні оголошення.");
+                });
+        }
+    }
+    function loadMyListings() {
+        if (!currentUID) {
+            mySalesList.innerHTML = '<p style="text-align: center; color: var(--danger-color);">Помилка: Користувач не авторизований.</p>';
+            return;
+        }
+        mySalesList.innerHTML = '<p style="text-align: center; color: var(--secondary-text-color);">Завантаження активних оголошень...</p>';
+        const listingsRef = ref(database, 'market/selling'); 
+        onValue(listingsRef, (snapshot) => {
+            const listings = snapshot.val();
+            mySalesList.innerHTML = ''; 
+            let myListingsFound = 0;
+            if (listings) {
+                Object.keys(listings).forEach(key => {
+                    const listingData = listings[key];
+                    listingData.id = key; 
+                    if (listingData.sellerUID === currentUID) {
+                        const card = createMyListingCard(listingData);
+                        mySalesList.appendChild(card);
+                        myListingsFound++;
+                    }
+                });
+            } 
+            if (myListingsFound === 0) {
+                 mySalesList.innerHTML = '<p style="text-align: center; color: var(--secondary-text-color);">none</p>';
+            }
+        }, (error) => {
+            console.error("Помилка завантаження власних оголошень:", error);
+            mySalesList.innerHTML = '<p style="text-align: center; color: var(--danger-color);">❌ Помилка завантаження ваших продажів.</p>';
+        });
+    }
+    function loadMyTransactions() {
+        if (!currentUID) return;
+        myTransactionsList.innerHTML = '<p style="text-align: center; color: var(--secondary-text-color);">Завантаження історії продажів...</p>';
+        const transactionsRef = ref(database, 'transactions'); 
+        onValue(transactionsRef, (snapshot) => {
+            const transactions = snapshot.val();
+            myTransactionsList.innerHTML = ''; 
+            let transactionsFound = 0;
+            const salesFragment = document.createDocumentFragment();
+            if (transactions) {
+                const sortedTransactions = Object.values(transactions)
+                    .filter(t => t.sellerUID === currentUID && t.paymentStatus === 'confirmed')
+                    .sort((a, b) => b.timestamp - a.timestamp); 
+                sortedTransactions.forEach(transaction => {
+                    const totalAmount = (transaction.pricePerUnit * transaction.quantity) || 0;
+                    const date = new Date(transaction.timestamp).toLocaleDateString('uk-UA');
+                    const transactionElement = document.createElement('div');
+                    transactionElement.className = 'transaction-item';
+                    transactionElement.innerHTML = `
+                        <div class="transaction-details">
+                            <div class="transaction-name">${transaction.productName || 'Невідомий товар'}</div>
+                            <div class="transaction-buyer-info">
+                                <span>Покупець: ${transaction.buyerUsername || transaction.buyerUID.substring(0, 4) + '...'}</span>
+                                <span>${date}</span>
+                            </div>
+                        </div>
+                        <div class="transaction-summary">
+                            <div class="transaction-amount">+${formatPrice(totalAmount)}€</div>
+                            <div class="transaction-qty">Кількість: ${transaction.quantity} шт.</div>
+                        </div>
+                    `;
+                    salesFragment.appendChild(transactionElement);
+                    transactionsFound++;
+                });
+            }
+            if (transactionsFound === 0) {
+                 myTransactionsList.innerHTML = '<p style="text-align: center; color: var(--secondary-text-color);">none</p>';
+            } else {
+                myTransactionsList.appendChild(salesFragment);
+            }
+        }, (error) => {
+            console.error("Помилка завантаження транзакцій:", error);
+            myTransactionsList.innerHTML = '<p style="text-align: center; color: var(--danger-color);">❌ Помилка завантаження транзакцій.</p>';
+        });
+    }
+    function createProductCard(listing) {
+        const price = Number(listing.price || listing.sum || 0);
+        const quantity = Number(listing.quantity || 0);
+        const isAvailable = quantity > 0;
+        const displayPrice = price > 0 ? `${formatPrice(price)}€` : 'Ціна відсутня';
+        const isOwnListing = currentUID && listing.sellerUID === currentUID;
+        const priceStatusClass = isAvailable && !isOwnListing ? 'available' : (isOwnListing ? 'own-listing' : 'unavailable');
+        const card = document.createElement('div');
+        card.className = 'product-card';
+        if (!isAvailable || isOwnListing) {
+            card.style.opacity = '0.6';
+            card.style.pointerEvents = 'none';
+        }
+        const imageSrc = listing.image ? `${IMAGE_BASE_PATH}${listing.image}` : 'placeholder.png'; 
+        let buttonText = isAvailable ? 'Купити' : 'Немає';
+        if (isOwnListing) {
+            buttonText = 'Ваш товар';
+        }
+        card.innerHTML = `
+            <div class="product-image">
+                <img src="${imageSrc}"> </img>
+            </div>
+            <div class="product-name">${listing.name || 'Невідомий товар'}</div>
+            <div class="product-price ${priceStatusClass}">${displayPrice}</div>
+            <button class="buy-button" ${isAvailable && !isOwnListing ? '' : 'disabled'}>${buttonText}</button>
+        `;
+        if (isAvailable && !isOwnListing) {
+            card.querySelector('.buy-button').addEventListener('click', () => {
+                openBuyModal(listing);
+            });
+        }
+        return card;
+    }
+    function loadMarketListings() {
+        const listingsRef = ref(database, 'market/selling'); 
+        onValue(listingsRef, (snapshot) => {
+            const listings = snapshot.val();
+            productGrid.innerHTML = ''; 
+            loadingMessage.style.display = 'none';
+            let listingsFound = 0;
+            if (listings) {
+                Object.keys(listings).forEach(key => {
+                    const listingData = listings[key];
+                    listingData.id = key; 
+                    const card = createProductCard(listingData);
+                    productGrid.appendChild(card);
+                    listingsFound++;
+                });
+            } 
+            if (listingsFound === 0) {
+                 productGrid.innerHTML = '<p style="grid-column: 1 / span 3; text-align: center; color: var(--secondary-text-color);">none</p>';
+            }
+        }, (error) => {
+            console.error("Помилка завантаження оголошень:", error);
+            loadingMessage.textContent = ' Помилка завантаження. Спробуйте пізніше.';
+            loadingMessage.style.color = 'var(--danger-color)';
+        });
+    }
+    confirmBuyButton.addEventListener('click', handleConfirmBuy);
+    onAuthStateChanged(auth, async (user) => {
+        if (user) {
+            currentUID = user.uid;
+            currentUsername = await fetchCurrentUsername(user.uid); 
+            myChatsButton.style.display = 'flex'; 
+        } else {
+            currentUID = null;
+            currentUsername = null;
+            myChatsButton.style.display = 'none'; 
+        }
+        loadMarketListings();
+    });
+</script>
+    <script src="translate.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const savedLang = localStorage.getItem('user_lang') || 'en';
+        if (typeof applyTranslation === 'function') {
+            applyTranslation(savedLang);
+        } else if (typeof setLanguage === 'function') {
+            setLanguage(savedLang);
+        }
+    });
+</script>
+        <script>function applyThemeOnLoad(){if(localStorage.getItem('theme')==='dark'){document.body.classList.add('dark-mode');}}applyThemeOnLoad();</script>
+</body>
+</html>
