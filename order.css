@@ -96,7 +96,7 @@ input:focus {
 }
 .submit-button {
     background-color: var(--primary-color);
-    color: vaf(--text-color);
+    color: white;
     border: none;
     border-radius: var(--border-radius);
     padding: 18px;
